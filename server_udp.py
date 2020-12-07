@@ -2,18 +2,24 @@
 
 import socket
 
-sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)      # For UDP
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)      # UDP
 
-udp_host = socket.gethostname()		        # Host IP
-udp_port = 12345			                # specified port to connect
+HOST = 'localhost'		        #IP del host
+PORT = 12345			                #puerto
 
-#print type(sock) ============> 'type' can be used to see type 
-				# of any variable ('sock' here)
+sock.bind((HOST,PORT))
 
-sock.bind((udp_host,udp_port))
+data = "1"
 
-while True:
-    print("Waiting for client...")
+while data:
+    print("Eserando cliente...")
     data,addr = sock.recvfrom(1024)	        #receive data from client
-    sock.sendto(data,(udp_host,udp_port))      #send message to UDP server 
-    print("Received Messages:",data," from",addr)
+    if(not data):
+        break           #salir del loop
+    else:
+        print("Mensaje recibido: ",data)
+        data = data.upper() #convertimos letras a muysculas
+        sock.sendto(data,addr)      #send message to UDP server 
+
+sock.close()    #terminar conexion
+    
